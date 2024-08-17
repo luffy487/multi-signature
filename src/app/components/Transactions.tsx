@@ -97,7 +97,7 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({
                 {txn.to.slice(0, 6)}...{txn.to.slice(-4)}
               </TableCell>
               <TableCell className="px-4 py-3 text-base text-gray-700 text-center">
-                {Number(txn.value) + " ETH"}
+                {(Number(txn.value) / 10 ** 18) + " ETH"}
               </TableCell>
               <TableCell className="px-4 py-3 text-base text-gray-700 text-center">
                 {txn.data.slice(0,6)}...{txn.data.slice(-4)}

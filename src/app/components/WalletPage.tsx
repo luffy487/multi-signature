@@ -22,7 +22,6 @@ const Wallet: React.FC<WalletProps> = ({ address }) => {
   const [send, setSend] = useState<boolean>(false);
   const [value, setValue] = useState<number>(0);
   const [to, setTo] = useState<string>("");
-  // const [data, setData] = useState<string>("");
   const [interaction, setInteraction] = useState<boolean>(false);
   const [contractABI, setContractABI] = useState<any>();
   const [smartContract, setSmartContract] = useState<any>();
@@ -48,14 +47,11 @@ const Wallet: React.FC<WalletProps> = ({ address }) => {
       let [name, transactions, autoExecute, threshold, balance] =
         await Promise.all([
           contract.methods.getWalletName().call(),
-          contract.methods.getAllTransactions().call(),
+          fetchTransactions(),
           contract.methods.getAutoExecute().call(),
           contract.methods.fetchThreshold().call(),
           fetchBalance(address),
         ]);
-      transactions = transactions.sort((a: any, b: any) => {
-        return Number(b.createdAt) - Number(a.createdAt);
-      });
       setName(name);
       setTransactions(transactions);
       setAutoExecute(autoExecute);
@@ -66,6 +62,12 @@ const Wallet: React.FC<WalletProps> = ({ address }) => {
       console.log("Error in initializing the contract");
     }
   };
+  const fetchTransactions = async () => {
+    let transactions =  await contract.methods.getAllTransactions().call();
+    return transactions.sort((a: any, b: any) => {
+      return Number(b.createdAt) - Number(a.createdAt);
+    });
+  }
   const prepareTransaction = async () => {
     if (!selectedMethod) {
       toast.error("Please select a method");
@@ -129,7 +131,7 @@ const Wallet: React.FC<WalletProps> = ({ address }) => {
         .proposeTransaction(data ? data : "0x", to, value)
         .send({ from: account });
       clearContract();
-      let transactions = await contract.methods.getAllTransactions().call();
+      let transactions = await fetchTransactions()
       setTransactions(transactions);
       setInteraction(false);
     } catch (err) {
@@ -139,6 +141,8 @@ const Wallet: React.FC<WalletProps> = ({ address }) => {
   const approve = async (txId: Number) => {
     try {
       await contract.methods.approveTransaction(txId).send({ from: account });
+      let transactions = await fetchTransactions()
+      setTransactions(transactions);
     } catch (err) {
       console.log("Err", err);
     }
