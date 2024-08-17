@@ -47,11 +47,14 @@ const Wallet: React.FC<WalletProps> = ({ address }) => {
       let [name, transactions, autoExecute, threshold, balance] =
         await Promise.all([
           contract.methods.getWalletName().call(),
-          fetchTransactions(),
+          contract.methods.getAllTransactions().call(),
           contract.methods.getAutoExecute().call(),
           contract.methods.fetchThreshold().call(),
           fetchBalance(address),
         ]);
+      transactions = transactions.sort((a:any, b:any) => {
+        return Number(b.createdAt) - Number(a.createdAt);
+      })
       setName(name);
       setTransactions(transactions);
       setAutoExecute(autoExecute);
@@ -151,6 +154,8 @@ const Wallet: React.FC<WalletProps> = ({ address }) => {
   const execute = async (txId: Number) => {
     try {
       await contract.methods.executeTransaction(txId).send({ from: account });
+      let transactions = await fetchTransactions()
+      setTransactions(transactions);
     } catch (err) {
       console.log("Err", err);
     }
@@ -259,11 +264,11 @@ const Wallet: React.FC<WalletProps> = ({ address }) => {
                 type="number"
                 value={value}
                 onChange={(event: any) => setValue(Number(event.target.value))}
-                placeholder="Amount to Send in Wei"
+                placeholder="Amount to Send in wei"
                 className="border border-gray-300 rounded-md p-4 w-full text-lg pt-6"
               />
               <label className="absolute top-0 left-3 bg-white px-1 text-gray-500 text-sm transform -translate-y-1/2">
-                {"Value (in Wei)"}
+                {"Value (in wei)"}
               </label>
             </div>
             <div className="flex justify-end space-x-4">
