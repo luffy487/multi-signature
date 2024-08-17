@@ -1,0 +1,350 @@
+export const FACTORY_ADDRESS = "0xd12225e8E29dd63e09cE77967a883DB3BF86fe4e";
+export const FACTORY_ABI = [
+  {
+    type: "function",
+    name: "Wallets",
+    inputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+    outputs: [
+      { name: "title", type: "string", internalType: "string" },
+      {
+        name: "walletAddress",
+        type: "address",
+        internalType: "address",
+      },
+      { name: "threshold", type: "uint256", internalType: "uint256" },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "createNewMultiSigWallet",
+    inputs: [
+      { name: "_title", type: "string", internalType: "string" },
+      { name: "_owners", type: "address[]", internalType: "address[]" },
+      { name: "_threshold", type: "uint256", internalType: "uint256" },
+      { name: "_autoExecute", type: "bool", internalType: "bool" },
+    ],
+    outputs: [{ name: "", type: "address", internalType: "address" }],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "fetchWallets",
+    inputs: [{ name: "_address", type: "address", internalType: "address" }],
+    outputs: [
+      {
+        name: "",
+        type: "tuple[]",
+        internalType: "struct Factory.Wallet[]",
+        components: [
+          { name: "title", type: "string", internalType: "string" },
+          {
+            name: "walletAddress",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "owners",
+            type: "address[]",
+            internalType: "address[]",
+          },
+          {
+            name: "threshold",
+            type: "uint256",
+            internalType: "uint256",
+          },
+        ],
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "walletCount",
+    inputs: [],
+    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "event",
+    name: "WalletCreated",
+    inputs: [
+      {
+        name: "wallet",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "owners",
+        type: "address[]",
+        indexed: false,
+        internalType: "address[]",
+      },
+    ],
+    anonymous: false,
+  },
+];
+export const MULTI_SIG_ABI = [
+  {
+    type: "constructor",
+    inputs: [
+      { name: "_owners", type: "address[]", internalType: "address[]" },
+      { name: "_threshold", type: "uint256", internalType: "uint256" },
+      { name: "_autoExecute", type: "bool", internalType: "bool" },
+      { name: "_title", type: "string", internalType: "string" },
+    ],
+    stateMutability: "nonpayable",
+  },
+  { type: "receive", stateMutability: "payable" },
+  {
+    type: "function",
+    name: "approveTransaction",
+    inputs: [{ name: "_txId", type: "uint256", internalType: "uint256" }],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "autoExecute",
+    inputs: [],
+    outputs: [{ name: "", type: "bool", internalType: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "executeTransaction",
+    inputs: [{ name: "_txId", type: "uint256", internalType: "uint256" }],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "fetchThreshold",
+    inputs: [],
+    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "fetchWalletOwners",
+    inputs: [],
+    outputs: [{ name: "", type: "address[]", internalType: "address[]" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "getAllTransactions",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "tuple[]",
+        internalType: "struct MultiSig.Transaction[]",
+        components: [
+          { name: "txId", type: "uint256", internalType: "uint256" },
+          { name: "data", type: "bytes", internalType: "bytes" },
+          { name: "executed", type: "bool", internalType: "bool" },
+          { name: "to", type: "address", internalType: "address" },
+          { name: "value", type: "uint256", internalType: "uint256" },
+          {
+            name: "approvals",
+            type: "address[]",
+            internalType: "address[]",
+          },
+          {
+            name: "createdBy",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "createdAt",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "executedAt",
+            type: "uint256",
+            internalType: "uint256",
+          },
+        ],
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "getAutoExecute",
+    inputs: [],
+    outputs: [{ name: "", type: "bool", internalType: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "getTransaction",
+    inputs: [{ name: "_txId", type: "uint256", internalType: "uint256" }],
+    outputs: [
+      {
+        name: "",
+        type: "tuple",
+        internalType: "struct MultiSig.Transaction",
+        components: [
+          { name: "txId", type: "uint256", internalType: "uint256" },
+          { name: "data", type: "bytes", internalType: "bytes" },
+          { name: "executed", type: "bool", internalType: "bool" },
+          { name: "to", type: "address", internalType: "address" },
+          { name: "value", type: "uint256", internalType: "uint256" },
+          {
+            name: "approvals",
+            type: "address[]",
+            internalType: "address[]",
+          },
+          {
+            name: "createdBy",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "createdAt",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "executedAt",
+            type: "uint256",
+            internalType: "uint256",
+          },
+        ],
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "getWalletName",
+    inputs: [],
+    outputs: [{ name: "", type: "string", internalType: "string" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "isApproved",
+    inputs: [
+      { name: "_txId", type: "uint256", internalType: "uint256" },
+      { name: "addr", type: "address", internalType: "address" },
+    ],
+    outputs: [{ name: "", type: "bool", internalType: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "isOwner",
+    inputs: [{ name: "addr", type: "address", internalType: "address" }],
+    outputs: [{ name: "", type: "bool", internalType: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "owners",
+    inputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+    outputs: [{ name: "", type: "address", internalType: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "proposeTransaction",
+    inputs: [
+      { name: "_data", type: "bytes", internalType: "bytes" },
+      { name: "_to", type: "address", internalType: "address" },
+      { name: "_value", type: "uint256", internalType: "uint256" },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "threshold",
+    inputs: [],
+    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "thresholdMet",
+    inputs: [{ name: "_txId", type: "uint256", internalType: "uint256" }],
+    outputs: [{ name: "", type: "bool", internalType: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "transactionsCount",
+    inputs: [],
+    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "updateAutoExecute",
+    inputs: [],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "updateThreshold",
+    inputs: [{ name: "_threshold", type: "uint256", internalType: "uint256" }],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "event",
+    name: "TransactionApproved",
+    inputs: [
+      {
+        name: "txId",
+        type: "uint256",
+        indexed: true,
+        internalType: "uint256",
+      },
+      {
+        name: "approver",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "TransactionCreated",
+    inputs: [
+      {
+        name: "txId",
+        type: "uint256",
+        indexed: true,
+        internalType: "uint256",
+      },
+      {
+        name: "creator",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "TransactionExecuted",
+    inputs: [
+      {
+        name: "txId",
+        type: "uint256",
+        indexed: true,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+];
